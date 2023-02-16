@@ -1,21 +1,23 @@
-import { BadRequestException, PipeTransform } from "@nestjs/common";
-import { PostCategory } from "../posts.model";
-
+import { BadRequestException, PipeTransform } from '@nestjs/common';
+import { PostCategory } from '../post-category-enum';
 
 export class PostCategoryValidationPipe implements PipeTransform {
-  readonly allowedCategories = Object.keys(PostCategory)
-  transform(value: string) {
-
-    value = value.toUpperCase()
+  readonly allowedCategories = [
+    PostCategory.LIFE,
+    PostCategory.TECH,
+    PostCategory.GENERAL,
+  ];
+  transform(value: any) {
+    value = value.toUpperCase();
 
     if (!this.isCategoryValid(value)) {
-      throw new BadRequestException(`"${value}" is not a valid category`)
+      throw new BadRequestException(`"${value}" is not a valid category`);
     }
-    return value
+    return value;
   }
 
-  private isCategoryValid(category: string) {
-    const idx = this.allowedCategories.indexOf(category)
-    return idx !== -1
+  private isCategoryValid(category: any) {
+    const idx = this.allowedCategories.indexOf(category);
+    return idx !== -1;
   }
 }

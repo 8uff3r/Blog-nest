@@ -1,62 +1,58 @@
-import { Injectable, NotFoundException, Param, Post } from '@nestjs/common';
-import { BPost, PostCategory } from './posts.model';
-import { randomUUID } from 'crypto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
-import { log } from 'console';
 import { GetPostsFilterDto } from './dto/get-posts-filter.dto';
+import { BPost } from './post.entity';
+import { PostCategory } from './post-category-enum';
+import { PostsRepository } from './post.repository';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class PostsService {
-  private posts: BPost[] = []
+  constructor(private postRepository: PostsRepository) {}
 
-  // getters:
-
-  getAllPosts(): BPost[] {
-    return this.posts
+  async getPosts(filterDto: GetPostsFilterDto, user: User) {
+    return await this.postRepository.getPosts(filterDto, user);
   }
 
-  getPostById(id: string): BPost {
-    const found = this.posts.find(post => post.id === id)
-    if (!found) throw new NotFoundException()
-    return found
+  async getPostById(id: number, user: User): Promise<BPost> {
+    const found = await this.postRepository.findOne({
+      where: {
+        id: id,
+        userId: user.id,
+      },
+    });
+    if (!found) throw new NotFoundException(`"${id}" was not found`);
+    return found;
   }
 
-  getPostsByFilters(filterDto: GetPostsFilterDto): BPost[] {
-    const { category, search } = filterDto
-
-    let posts = this.getAllPosts()
-
-    if (category) {
-      posts = posts.filter(post => post.category == category)
-    }
-
-    if (search) {
-      posts = posts.filter(post => post.title.includes(search) || post.text.includes(search))
-    }
-
-    return posts
-  }
-  //
-  createPost(createPostDto: CreatePostDto): BPost {
-    const { title, text, category } = createPostDto
-    const bPost: BPost = {
-      id: randomUUID(),
-      title,
-      text, category: PostCategory[category]
-    }
-
-    this.posts.push(bPost)
-    return bPost
+  async createPost(createPostDto: CreatePostDto, user: User): Promise<BPost> {
+    const { title, text } = createPostDto;
+    const post = new BPost();
+    post.title = title;
+    post.text = text;
+    post.category = PostCategory.GENERAL;
+    post.user = user;
+    await post.save();
+    delete post.user;
+    return post;
   }
 
-  updatePostCategory(id: string, category: PostCategory) {
-    const post = this.getPostById(id)
-    post.category = category
-    return post
+  async updatePostCategory(
+    id: number,
+    category: PostCategory,
+    user: User,
+  ): Promise<BPost> {
+    const post = await this.getPostById(id, user);
+    post.category = category;
+    post.save();
+    return post;
   }
 
-  deletePostById(id: string) {
-    const found = this.getPostById(id)
-    this.posts = this.posts.filter(post => post.id !== found.id)
+  async deletePostById(id: number, user: User) {
+    const status = await this.postRepository.delete({
+      id: id,
+      userId: user.id,
+    });
+    return status.affected;
   }
 }

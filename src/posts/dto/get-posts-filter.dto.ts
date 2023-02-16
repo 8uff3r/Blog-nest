@@ -1,12 +1,12 @@
-import { IsIn, IsNotEmpty, IsOptional } from "class-validator";
-import { PostCategory } from "../posts.model";
+import { IsNotEmpty, IsOptional, Matches } from 'class-validator';
+import { PostCategory } from '../post-category-enum';
 
 export class GetPostsFilterDto {
   @IsOptional()
-  @IsIn(Object.keys(PostCategory))
-  category: PostCategory
+  @Matches(`^${Object.values(PostCategory).join('|')}$`, 'i')
+  category: PostCategory | string;
 
   @IsOptional()
   @IsNotEmpty()
-  search: string
+  search: string;
 }

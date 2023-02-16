@@ -1,17 +1,31 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { PostCategory } from "./posts.model";
+import { User } from 'src/auth/user.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { PostCategory } from './post-category-enum';
 
 @Entity()
 export class BPost extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  title: string
+  title: string;
 
   @Column()
-  text: string
+  text: string;
 
   @Column()
-  category: PostCategory
+  category: PostCategory | string;
+
+  @ManyToOne((type) => User, (user) => user.posts, { eager: false })
+  user: User;
+
+  @Column()
+  userId: number;
 }
