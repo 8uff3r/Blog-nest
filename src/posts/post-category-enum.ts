@@ -1,5 +1,5 @@
 export enum PostCategory {
-  GENERAL = 'GENERAL',
-  LIFE = 'LIFE',
-  TECH = 'TECH',
+  GENERAL = "GENERAL",
+  LIFE = "LIFE",
+  TECH = "TECH",
 }

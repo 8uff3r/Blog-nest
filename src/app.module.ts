@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { PostsModule } from './posts/posts.module';
-import { AuthModule } from './auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfig } from './config/typeorm.config';
-import { DataSource } from 'typeorm';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
+import { AuthModule } from "./auth/auth.module";
+import { typeOrmConfig } from "./config/typeorm.config";
+import { PostsModule } from "./posts/posts.module";
 
 @Module({
   imports: [TypeOrmModule.forRoot(typeOrmConfig), PostsModule, AuthModule],

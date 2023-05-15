@@ -1,13 +1,6 @@
-import { User } from 'src/auth/user.entity';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { PostCategory } from './post-category-enum';
+import { User } from "src/auth/user.entity";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { PostCategory } from "./post-category-enum";
 
 @Entity()
 export class BPost extends BaseEntity {

@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
-import { GetPostsFilterDto } from './dto/get-posts-filter.dto';
-import { BPost } from './post.entity';
-import { PostCategory } from './post-category-enum';
-import { PostsRepository } from './post.repository';
-import { User } from 'src/auth/user.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { User } from "src/auth/user.entity";
+import { CreatePostDto } from "./dto/create-post.dto";
+import { GetPostsFilterDto } from "./dto/get-posts-filter.dto";
+import { PostCategory } from "./post-category-enum";
+import { BPost } from "./post.entity";
+import { PostsRepository } from "./post.repository";
 
 @Injectable()
 export class PostsService {
@@ -26,13 +26,7 @@ export class PostsService {
   }
 
   async createPost(createPostDto: CreatePostDto, user: User): Promise<BPost> {
-    const { title, text } = createPostDto;
-    const post = new BPost();
-    post.title = title;
-    post.text = text;
-    post.category = PostCategory.GENERAL;
-    post.user = user;
-    await post.save();
+    const post = await this.postRepository.createPost(createPostDto, user);
     delete post.user;
     return post;
   }

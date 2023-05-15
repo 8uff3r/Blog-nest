@@ -9,21 +9,21 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
-  UseGuards,
-} from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
-import { CreatePostDto } from './dto/create-post.dto';
-import { GetPostsFilterDto } from './dto/get-posts-filter.dto';
-import { PostCategoryValidationPipe } from './pipes/post-category-validation.pipe';
-import { PostCategory } from './post-category-enum';
-import { BPost } from './post.entity';
-import { PostsService } from './posts.service';
+} from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import { GetUser } from "src/auth/get-user.decorator";
+import { User } from "src/auth/user.entity";
+import { CreatePostDto } from "./dto/create-post.dto";
+import { GetPostsFilterDto } from "./dto/get-posts-filter.dto";
+import { PostCategoryValidationPipe } from "./pipes/post-category-validation.pipe";
+import { PostCategory } from "./post-category-enum";
+import { BPost } from "./post.entity";
+import { PostsService } from "./posts.service";
 
-@Controller('posts')
+@Controller("posts")
 @UseGuards(AuthGuard())
 export class PostsController {
   constructor(private postsService: PostsService) {}
@@ -36,15 +36,15 @@ export class PostsController {
     return this.postsService.getPosts(filterDto, user);
   }
 
-  @Get(':id')
+  @Get(":id")
   getPostById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number,
     @GetUser() user: User,
   ): Promise<BPost> {
     return this.postsService.getPostById(id, user);
   }
 
-  @Post()
+  @Post("create")
   @UsePipes(ValidationPipe)
   createPost(
     @Body() createPostDto: CreatePostDto,
@@ -53,18 +53,18 @@ export class PostsController {
     return this.postsService.createPost(createPostDto, user);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   updatePostField(
-    @Param('id', ParseIntPipe) id: number,
-    @Body('category', PostCategoryValidationPipe) category: PostCategory,
+    @Param("id", ParseIntPipe) id: number,
+    @Body("category", PostCategoryValidationPipe) category: PostCategory,
     @GetUser() user: User,
   ): Promise<BPost> {
     return this.postsService.updatePostCategory(id, category, user);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   async deletePostById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number,
     @GetUser() user: User,
   ) {
     const status = await this.postsService.deletePostById(id, user);
