@@ -14,9 +14,9 @@ import { AuthGuard } from "@nestjs/passport";
 import { log } from "console";
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
-import { Cookies } from "./cookie.decorator";
+import { Cookies } from "./decorators/cookie.decorator";
+import { GetUser } from "./decorators/get-user.decorator";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
-import { GetUser } from "./get-user.decorator";
 import { User } from "./user.entity";
 
 @Controller("auth")

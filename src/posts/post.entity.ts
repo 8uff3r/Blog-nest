@@ -20,5 +20,5 @@ export class BPost extends BaseEntity {
   user: User;
 
   @Column()
-  userId: number;
+  userId?: number;
 }

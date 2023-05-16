@@ -17,6 +17,7 @@ export class PostsRepository extends Repository<BPost> {
     post.title = title;
     post.text = text;
     post.category = PostCategory.GENERAL;
+    // TODO add signin to UI
     post.user = user;
     await post.save();
     return post;
@@ -39,5 +40,12 @@ export class PostsRepository extends Repository<BPost> {
 
     const posts = await query.getMany();
     return posts;
+  }
+
+  async getAllPosts() {
+    return this.find({
+      order: { id: "DESC" },
+    });
+    // return await posts.execute();
   }
 }

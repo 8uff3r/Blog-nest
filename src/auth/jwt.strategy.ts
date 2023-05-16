@@ -10,12 +10,12 @@ import { UserRepository } from "./user.repository";
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private userRepository: UserRepository) {
     super({
-      // jwtFromRequest: ExtractJwt.fromExtractors([
-      //   (request: Request) => {
-      //     return request?.cookies?.auth;
-      //   },
-      // ]),
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => {
+          return request?.cookies?.auth;
+        },
+      ]),
+      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: "secretsecret",
     });
   }
@@ -33,6 +33,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
+    user.username = username;
     return user;
   }
 }

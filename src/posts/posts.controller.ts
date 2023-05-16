@@ -9,12 +9,14 @@ import {
   Patch,
   Post,
   Query,
+  Res,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { GetUser } from "src/auth/get-user.decorator";
+import { Response } from "express";
+import { GetUser } from "src/auth/decorators/get-user.decorator";
 import { User } from "src/auth/user.entity";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { GetPostsFilterDto } from "./dto/get-posts-filter.dto";
@@ -46,11 +48,20 @@ export class PostsController {
 
   @Post("create")
   @UsePipes(ValidationPipe)
-  createPost(
+  async createPost(
     @Body() createPostDto: CreatePostDto,
     @GetUser() user: User,
-  ): Promise<BPost> {
-    return this.postsService.createPost(createPostDto, user);
+    @Res() res: Response,
+  ) {
+    const post = await this.postsService.createPost(createPostDto, user);
+    return res.render(
+      "partials/post",
+      {
+        layout: false,
+        title: post.title,
+        text: post.text,
+      },
+    );
   }
 
   @Patch(":id")
