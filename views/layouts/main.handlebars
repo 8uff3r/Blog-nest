@@ -7,11 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="css/style.css" rel="stylesheet">
   <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@latest/dist/ext/alpine-morph.js"></script>
+  <script defer src="https://unpkg.com/@alpinejs/morph@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="alpine.min.js"></script>
+  <script src="tailwind.js"></script>
+  <script defer>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('cp', {
+        show: true,
+        toggle() {
+          this.show = !this.show
+        }
+      })
+    })
+  </script>
 </head>
 
 <body>
-
   <header aria-label="Page Header">
     <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
       <div class="sm:flex sm:items-center sm:justify-between">
@@ -40,7 +52,7 @@
 
           <button
             class="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-            type="button" hx-post="/create" hx-target="main" hx-swap="afterbegin">
+            type="button" hx-post="/create" hx-target="#cp">
             Create Post
           </button>
         </div>

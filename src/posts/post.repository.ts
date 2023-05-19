@@ -17,35 +17,22 @@ export class PostsRepository extends Repository<BPost> {
     post.title = title;
     post.text = text;
     post.category = PostCategory.GENERAL;
-    // TODO add signin to UI
     post.user = user;
     await post.save();
     return post;
   }
 
-  async getPosts(filterDto: GetPostsFilterDto, user: User): Promise<BPost[]> {
-    const { category, search } = filterDto;
+  async getUserPostsRev(user: User): Promise<BPost[]> {
     const query = this.createQueryBuilder("b_post");
     query.where("b_post.userId = :userId", { userId: user.id });
-    if (category) {
-      query.andWhere("b_post.category ILIKE :category", { category });
-    }
-
-    if (search) {
-      query.andWhere(
-        "b_post.title ILIKE :search OR b_post.text ILIKE :search",
-        { search: `%${search}%` },
-      );
-    }
-
+    query.orderBy("id", "DESC");
     const posts = await query.getMany();
     return posts;
   }
 
-  async getAllPosts() {
-    return this.find({
+  async getAllPostsRev() {
+    return await this.find({
       order: { id: "DESC" },
     });
-    // return await posts.execute();
   }
 }

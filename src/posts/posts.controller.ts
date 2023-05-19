@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  Render,
   Res,
   UseGuards,
   UsePipes,
@@ -31,19 +32,19 @@ export class PostsController {
   constructor(private postsService: PostsService) {}
 
   @Get()
-  getPosts(
+  getUserPosts(
     @Query(ValidationPipe) filterDto: GetPostsFilterDto,
     @GetUser() user: User,
   ): Promise<BPost[]> {
-    return this.postsService.getPosts(filterDto, user);
+    return this.postsService.getUserPosts(filterDto, user);
   }
 
   @Get(":id")
-  getPostById(
+  async getPostById(
     @Param("id", ParseIntPipe) id: number,
     @GetUser() user: User,
-  ): Promise<BPost> {
-    return this.postsService.getPostById(id, user);
+  ) {
+    return await this.postsService.getPostById(id, user);
   }
 
   @Post("create")
@@ -58,19 +59,27 @@ export class PostsController {
       "partials/post",
       {
         layout: false,
+        id: post.id,
         title: post.title,
         text: post.text,
       },
     );
   }
 
-  @Patch(":id")
-  updatePostField(
+  @Post(":id")
+  async updatePost(
     @Param("id", ParseIntPipe) id: number,
-    @Body("category", PostCategoryValidationPipe) category: PostCategory,
+    @Body(PostCategoryValidationPipe) post: CreatePostDto,
     @GetUser() user: User,
-  ): Promise<BPost> {
-    return this.postsService.updatePostCategory(id, category, user);
+    @Res() res: Response,
+  ) {
+    const editedPost = await this.postsService.updatePost(id, post, user);
+    return res.render("partials/post", {
+      layout: false,
+      id: editedPost.id,
+      title: editedPost.title,
+      text: editedPost.text,
+    });
   }
 
   @Delete(":id")

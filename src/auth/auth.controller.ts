@@ -5,6 +5,7 @@ import {
   HttpException,
   Post,
   Redirect,
+  Render,
   Req,
   Res,
   UseGuards,
@@ -34,11 +35,12 @@ export class AuthController {
     @Cookies("auth") auth: string,
     @Res({ passthrough: true }) res: Response,
     @Req() request: Request,
-  ): Promise<{ accessToken: string }> {
+  ) {
     try {
       const { accessToken }: { accessToken: string } = await this.authService.signin(authCredentuialsDto);
       res.cookie("auth", accessToken);
-      return { accessToken };
+      // return { accessToken };
+      return res.redirect("/home");
     } catch (error) {
       console.log(error);
       throw new HttpException(error, 400, { cause: new Error(error) });

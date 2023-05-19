@@ -1,4 +1,7 @@
-  <div class="bg-gray-100 rounded-lg m-8 p-4">
+<div class="bg-gray-100 rounded-lg m-8 p-4" id="p-{{id}}">
+  <button class="px-2 rounded-md bg-red-400" hx-delete="/posts/{{id}}" hx-swap="outerHTML" hx-target="#p-{{id}}">X</button>
+  <button class="px-2 rounded-md bg-indigo-300" hx-get="/edit/{{id}}" hx-target="#p-{{id}}" hx-swap="outerHTML">edit</button>
+    <br>
     <h1 class="text-4xl">
       {{title}}
     </h1>

@@ -10,8 +10,8 @@ import { PostsRepository } from "./post.repository";
 export class PostsService {
   constructor(private postRepository: PostsRepository) {}
 
-  async getPosts(filterDto: GetPostsFilterDto, user: User) {
-    return await this.postRepository.getPosts(filterDto, user);
+  async getUserPosts(filterDto: GetPostsFilterDto, user: User) {
+    return await this.postRepository.getUserPostsRev(user);
   }
 
   async getPostById(id: number, user: User): Promise<BPost> {
@@ -31,13 +31,15 @@ export class PostsService {
     return post;
   }
 
-  async updatePostCategory(
+  async updatePost(
     id: number,
-    category: PostCategory,
+    post1: CreatePostDto,
     user: User,
   ): Promise<BPost> {
     const post = await this.getPostById(id, user);
-    post.category = category;
+    post.category = post1.category;
+    post.title = post1.title;
+    post.text = post1.text;
     post.save();
     return post;
   }

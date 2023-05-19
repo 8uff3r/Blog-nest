@@ -1,5 +1,8 @@
 <main>
-  {{#each posts}}
-    {{> post title=this.title text=this.text}}
+  <div id="cp" class="hi">
+
+  </div>
+  {{#each userPosts}}
+    {{> post title=this.title text=this.text isAuthed=true}}
   {{/each}}
 </main>

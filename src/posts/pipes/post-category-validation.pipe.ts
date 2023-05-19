@@ -8,9 +8,9 @@ export class PostCategoryValidationPipe implements PipeTransform {
     PostCategory.GENERAL,
   ];
   transform(value: any) {
-    value = value.toUpperCase();
+    value.category = value.category.toUpperCase();
 
-    if (!this.isCategoryValid(value)) {
+    if (!this.isCategoryValid(value.category)) {
       throw new BadRequestException(`"${value}" is not a valid category`);
     }
     return value;

@@ -1,0 +1,9 @@
+<section>
+  {{#each posts}}
+    {{#if isAuthed}}
+      {{> post title=this.title text=this.text id=this.id}}
+    {{else}}
+      {{> PublicPost title=this.title text=this.text id=this.id}}
+    {{/if}}
+  {{/each}}
+</section>

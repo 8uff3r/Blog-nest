@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/style.css" rel="stylesheet">
+  <!-- <script src="htmx.min.js"></script> -->
+  <script defer src="alpine.min.js"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <script src="tailwind.js"></script> -->
+</head>
+
+<body>
+
+  <header aria-label="Page Header">
+    <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="text-center sm:text-left">
+          <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+            BloGGG!
+          </h1>
+
+          <p class="mt-1.5 text-sm text-gray-500">
+            Let's write a Blog! 🎉
+          </p>
+        </div>
+
+        <div x-data="{ showModal: false}" @keydown.window.escape="showModal = false">
+          <div class="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
+            <button hx-trigger="click" hx-get="/signin" hx-target="#modal" hx-swap="innerHtml"
+              @click="showModal = !showModal"
+              class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-5 py-3 text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring"
+              class="button">SignIn</button>
+
+
+            <button hx-trigger="click" hx-get="/signup" hx-target="#modal" hx-swap="innerHtml"
+              @click="showModal = !showModal"
+              class="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring">SignUp</button>
+
+          </div>
+          <div x-cloak x-show="showModal" x-transition.opacity class="fixed inset-0 bg-slate-900/75"></div>
+          <div x-cloak x-show="showModal" x-transition
+            class="fixed inset-0 z-50 my-auto flex items-center justify-center">
+            <div @click.away="showModal = false" id="modal"
+              class="w-screen max-w-xl  bg-transparent rounded-lg flex items-center justify-center">
+              <div>
+                <div style="border-top-color:transparent"
+                  class="w-16 h-16 border-4 border-blue-400 border-solid rounded-full animate-spin">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  {{{body}}}
+</body>
+
+</html>

@@ -6,10 +6,11 @@ import { AuthModule } from "./auth/auth.module";
 import { typeOrmConfig } from "./config/typeorm.config";
 import { PostsRepository } from "./posts/post.repository";
 import { PostsModule } from "./posts/posts.module";
+import { PostsService } from "./posts/posts.service";
 
 @Module({
   imports: [TypeOrmModule.forRoot(typeOrmConfig), PostsModule, AuthModule],
-  providers: [PostsRepository],
+  providers: [PostsRepository, PostsService],
   controllers: [AppController],
 })
 export class AppModule {
