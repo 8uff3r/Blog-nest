@@ -1,3 +1,4 @@
+import { InjectRedis } from "@liaoliaots/nestjs-redis";
 import {
   Body,
   Controller,
@@ -8,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
   Query,
   Render,
   Res,
@@ -17,6 +19,7 @@ import {
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { Response } from "express";
+import Redis from "ioredis";
 import { GetUser } from "src/auth/decorators/get-user.decorator";
 import { User } from "src/auth/user.entity";
 import { CreatePostDto } from "./dto/create-post.dto";
@@ -29,7 +32,7 @@ import { PostsService } from "./posts.service";
 @Controller("posts")
 @UseGuards(AuthGuard())
 export class PostsController {
-  constructor(private postsService: PostsService) {}
+  constructor(private postsService: PostsService, @InjectRedis() private readonly redis: Redis) {}
 
   @Get()
   getUserPosts(
@@ -51,10 +54,11 @@ export class PostsController {
   @UsePipes(ValidationPipe)
   async createPost(
     @Body() createPostDto: CreatePostDto,
-    @GetUser() user: User,
+    @GetUser() curUser: User,
     @Res() res: Response,
   ) {
-    const post = await this.postsService.createPost(createPostDto, user);
+    const post = await this.postsService.createPost(createPostDto, curUser);
+    this.redis.lpush(JSON.stringify(post));
     return res.render(
       "partials/post",
       {
@@ -66,7 +70,7 @@ export class PostsController {
     );
   }
 
-  @Post(":id")
+  @Put(":id")
   async updatePost(
     @Param("id", ParseIntPipe) id: number,
     @Body(PostCategoryValidationPipe) post: CreatePostDto,

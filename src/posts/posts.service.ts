@@ -1,14 +1,21 @@
+import { InjectRedis } from "@liaoliaots/nestjs-redis";
 import { Injectable, NotFoundException } from "@nestjs/common";
+import Redis from "ioredis";
 import { User } from "src/auth/user.entity";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { GetPostsFilterDto } from "./dto/get-posts-filter.dto";
 import { PostCategory } from "./post-category-enum";
+import { PostEvent } from "./post-events.service";
 import { BPost } from "./post.entity";
 import { PostsRepository } from "./post.repository";
 
 @Injectable()
 export class PostsService {
-  constructor(private postRepository: PostsRepository) {}
+  constructor(
+    private postRepository: PostsRepository,
+    private postEvent: PostEvent,
+    @InjectRedis() private readonly redis: Redis,
+  ) {}
 
   async getUserPosts(filterDto: GetPostsFilterDto, user: User) {
     return await this.postRepository.getUserPostsRev(user);
@@ -28,6 +35,7 @@ export class PostsService {
   async createPost(createPostDto: CreatePostDto, user: User): Promise<BPost> {
     const post = await this.postRepository.createPost(createPostDto, user);
     delete post.user;
+    this.postEvent.postCreated(post);
     return post;
   }
 

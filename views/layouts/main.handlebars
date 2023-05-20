@@ -11,14 +11,9 @@
   <script defer src="https://unpkg.com/@alpinejs/morph@3.x.x/dist/cdn.min.js"></script>
   <script defer src="alpine.min.js"></script>
   <script src="tailwind.js"></script>
-  <script defer>
+  <script>
     document.addEventListener('alpine:init', () => {
-      Alpine.store('cp', {
-        show: true,
-        toggle() {
-          this.show = !this.show
-        }
-      })
+      Alpine.store('posts',{{count}})
     })
   </script>
 </head>
@@ -31,7 +26,7 @@
           <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
             Welcome Back, {{user}}!
           </h1>
-
+          <h2>You currently have <span x-data x-text="$store.posts"></span> posts</h2>
           <p class="mt-1.5 text-sm text-gray-500">
             Let's write a new blog post! 🎉
           </p>
