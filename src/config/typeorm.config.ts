@@ -11,3 +11,14 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   autoLoadEntities: true,
   synchronize: true,
 };
+// export const typeOrmConfig: TypeOrmModuleOptions = {
+//   type: "postgres",
+//   host: "nestblog",
+//   port: 5432,
+//   username: "root",
+//   password: "0kvhvRz6Fobs63kkQFHIyJWy",
+//   database: "postgress",
+//   entities: [BPost, User],
+//   autoLoadEntities: true,
+//   synchronize: true,
+// };

@@ -14,7 +14,7 @@ export class UserRepository extends Repository<User> {
     const { username, password } = authCredentialsDto;
 
     const user = new User();
-    user.username = username;
+    user.username = username.toLowerCase();
     user.salt = await genSalt();
     user.password = await hash(password, user.salt);
     try {

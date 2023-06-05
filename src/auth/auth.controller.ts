@@ -25,8 +25,12 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post("signup")
-  signup(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto) {
-    return this.authService.signup(authCredentialsDto);
+  signup(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto, @Res({ passthrough: true }) res: Response) {
+    try {
+      this.authService.signup(authCredentialsDto);
+      return res.redirect("/signin");
+    } catch (error) {
+    }
   }
 
   @Post("signin")

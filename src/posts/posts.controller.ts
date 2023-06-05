@@ -32,7 +32,8 @@ import { PostsService } from "./posts.service";
 @Controller("posts")
 @UseGuards(AuthGuard())
 export class PostsController {
-  constructor(private postsService: PostsService, @InjectRedis() private readonly redis: Redis) {}
+  constructor(private postsService: PostsService// @InjectRedis() private readonly redis: Redis
+  ) {}
 
   @Get()
   getUserPosts(
@@ -58,7 +59,7 @@ export class PostsController {
     @Res() res: Response,
   ) {
     const post = await this.postsService.createPost(createPostDto, curUser);
-    this.redis.lpush(JSON.stringify(post));
+    // this.redis.lpush(JSON.stringify(post));
     return res.render(
       "partials/post",
       {

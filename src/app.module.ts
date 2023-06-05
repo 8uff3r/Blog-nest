@@ -14,12 +14,12 @@ import { PostsService } from "./posts/posts.service";
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
-    RedisModule.forRoot({
-      config: {
-        host: "localhost",
-        port: 6379,
-      },
-    }),
+    // RedisModule.forRoot({
+    //   config: {
+    //     host: "localhost",
+    //     port: 6379,
+    //   },
+    // }),
     PostsModule,
     AuthModule,
   ],

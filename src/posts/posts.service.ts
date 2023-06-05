@@ -14,7 +14,7 @@ export class PostsService {
   constructor(
     private postRepository: PostsRepository,
     private postEvent: PostEvent,
-    @InjectRedis() private readonly redis: Redis,
+    // @InjectRedis() private readonly redis: Redis,
   ) {}
 
   async getUserPosts(filterDto: GetPostsFilterDto, user: User) {
